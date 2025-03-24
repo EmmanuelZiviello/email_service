@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>"f-taste" reset password</title>
+</head>
+
+<body>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 style="text-align:center;">Cambia password</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <p class="text-center">Usa il form sottostante per cambiare la tua password.</p>
+
+                <input type="password" class="input-lg form-control" name="password1" id="password1"
+                    placeholder="Nuova password" autocomplete="off">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span id="8char" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Lunga 8
+                        caratteri<br>
+                        <span id="ucase" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Una lettera
+                        maiuscola
+                    </div>
+                    <div class="col-sm-6">
+                        <span id="lcase" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Una lettera
+                        minuscola<br>
+                        <span id="num" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Almeno un numero e un carattere speciale
+                    </div>
+                </div>
+                <input type="password" class="input-lg form-control" name="password2" id="password2"
+                    placeholder="Ripeti password" autocomplete="off">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span id="pwmatch" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Password
+                        corrispondono
+                    </div>
+                </div>
+                <button onclick="cambia_password()" class="col-xs-12 btn btn-success btn-load btn-lg"
+                    data-loading-text="Changing Password...">
+                    Cambia Password
+                </button>
+
+            </div>
+            <!--/col-sm-6-->
+        </div>
+        <!--/row-->
+    </div>
+
+
+    <script>
+     function cambia_password() {
+            var ucase = new RegExp("[A-Z]+");
+            var lcase = new RegExp("[a-z]+");
+            var num = new RegExp("^(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
+
+
+
+
+            const params = new Proxy(new URLSearchParams(window.location.search), {
+                get: (searchParams, prop) => searchParams.get(prop),
+            });
+            
+
+
+            if ($("#password1").val().length >= 8 && ucase.test($("#password1").val())
+                && lcase.test($("#password1").val()) && num.test($("#password1").val())
+                && $("#password1").val() == $("#password2").val()) {
+                const user = {
+                    "id": params.id,
+                    "password": $("#password1").val()
+                }
+
+                // Options to be given as parameter
+                // in fetch for making requests
+                // other then GET
+                let options = {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': 'Bearer ' + params['jwt'],
+                        'Content-Type':
+                            'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(user)
+                }
+
+                // Fake api for making post requests
+                let fetchRes = fetch(
+                    "{{url}}/paziente/password",
+                    options);
+                fetchRes.then(res =>
+                    res.json()).then(d => {
+                        if(d.status=200){
+                            window.location.replace("{{url}}/success");
+                        }else{
+                            window.location.replace("{{url}}/failure");
+                        }
+                    })
+            }
+        }
+
+
+
+
+
+
+        $("input[type=password]").keyup(function () {
+            var ucase = new RegExp("[A-Z]+");
+            var lcase = new RegExp("[a-z]+");
+            var num = new RegExp("^(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
+
+
+            if ($("#password1").val().length >= 8) {
+                $("#8char").removeClass("glyphicon-remove");
+                $("#8char").addClass("glyphicon-ok");
+                $("#8char").css("color", "#00A41E");
+            } else {
+                $("#8char").removeClass("glyphicon-ok");
+                $("#8char").addClass("glyphicon-remove");
+                $("#8char").css("color", "#FF0004");
+            }
+
+            if (ucase.test($("#password1").val())) {
+                $("#ucase").removeClass("glyphicon-remove");
+                $("#ucase").addClass("glyphicon-ok");
+                $("#ucase").css("color", "#00A41E");
+            } else {
+                $("#ucase").removeClass("glyphicon-ok");
+                $("#ucase").addClass("glyphicon-remove");
+                $("#ucase").css("color", "#FF0004");
+            }
+
+            if (lcase.test($("#password1").val())) {
+                $("#lcase").removeClass("glyphicon-remove");
+                $("#lcase").addClass("glyphicon-ok");
+                $("#lcase").css("color", "#00A41E");
+            } else {
+                $("#lcase").removeClass("glyphicon-ok");
+                $("#lcase").addClass("glyphicon-remove");
+                $("#lcase").css("color", "#FF0004");
+            }
+
+            if (num.test($("#password1").val())) {
+                $("#num").removeClass("glyphicon-remove");
+                $("#num").addClass("glyphicon-ok");
+                $("#num").css("color", "#00A41E");
+            } else {
+                $("#num").removeClass("glyphicon-ok");
+                $("#num").addClass("glyphicon-remove");
+                $("#num").css("color", "#FF0004");
+            }
+
+            if ($("#password1").val() == $("#password2").val()) {
+                $("#pwmatch").removeClass("glyphicon-remove");
+                $("#pwmatch").addClass("glyphicon-ok");
+                $("#pwmatch").css("color", "#00A41E");
+            } else {
+                $("#pwmatch").removeClass("glyphicon-ok");
+                $("#pwmatch").addClass("glyphicon-remove");
+                $("#pwmatch").css("color", "#FF0004");
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
