@@ -16,6 +16,7 @@ KAFKA_BROKER_URL = "kafka-ftaste-kafka-ftaste.j.aivencloud.com:11837"
 consumer = KafkaConsumer(
     'email.pazienteRegistration.request',
     'email.pazienteRegistrationMedico.request',
+    'email.recuperopw.request',
     bootstrap_servers=KAFKA_BROKER_URL,
     client_id="email_consumer",
     group_id="email_service",
@@ -41,3 +42,8 @@ def consume(app):
                 response,status=EmailService.nutrizionista_registrazione_paziente(data)
                 topic_producer = "email.pazienteRegistrationMedico.success" if status == 200 else "email.pazienteRegistrationMedico.failed"
                 #send_kafka_message(topic_producer, response)
+            elif topic == "email.recuperopw.request":
+                response,status=EmailService.recupero_pw(data)
+                topic_producer = "email.recuperopw.success" if status == 200 else "email.pazienterecuperopw.failed"
+                #send_kafka_message(topic_producer, response)
+            

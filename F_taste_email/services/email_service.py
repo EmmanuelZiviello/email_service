@@ -1,5 +1,5 @@
 from smtplib import SMTPRecipientsRefused
-from F_taste_email.utils.mail_service import send_mail_registrazione_paziente,send_mail_registrazione_medico,EmailNotFound
+from F_taste_email.utils.mail_service import send_mail_registrazione_paziente,send_mail_registrazione_medico,send_mail_refresh_paziente,EmailNotFound
 
 
 
@@ -31,3 +31,13 @@ class EmailService:
             send_mail_registrazione_medico(id_paziente,password,email_nutrizionista,email_paziente)
         except EmailNotFound:
             return {"status_code":"404"}
+    
+    @staticmethod
+    def recupero_pw(s_email):
+        if "id_paziente" not in s_email or "email_paziente" not in s_email or "link" not in s_email:
+            return {"status_code":"400"}, 400
+        id_paziente=s_email["id_paziente"]
+        email_paziente=s_email["email_paziente"]
+        link=s_email["link"]
+        send_mail_refresh_paziente(email_paziente,link,id_paziente)
+        return {"status_code":"200"}, 200
