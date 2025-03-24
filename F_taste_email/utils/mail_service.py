@@ -51,24 +51,11 @@ def send_mail_registrazione_medico(codice_identificativo, password_temporanea, e
 	body_nutrizionista = MIMEText(html_nutrizionista, "html")
 	message_nutrizionista.attach(body_nutrizionista)
 
-	# Connessione SMTP con STARTTLS
-	with smtplib.SMTP(credentials.smtp_server, credentials.port) as server:
-		try:
-			server.starttls()
-			server.login(credentials.mail_sender_email, credentials.mail_sender_password)
-			server.sendmail(credentials.mail_sender_email, email_paziente, message_paziente.as_string())
-			server.sendmail(credentials.mail_sender_email, email_nutrizionista, message_nutrizionista.as_string())
-		except smtplib.SMTPException as e:
-			if e is smtplib.SMTPRecipientsRefused:
-				message = "{email_paziente} not exist or rejected"
-				raise EmailNotFound(message)
-			else:
-				raise e
+
 
 	
 
-	#COMMENTATO SOLO PERCHE' NON POSSO USARE SSL SUL MIO SMTP
-	"""
+	
 	context = ssl.create_default_context()
 	with smtplib.SMTP_SSL(credentials.smtp_server, credentials.port, context=context) as server:
 		try:
@@ -81,7 +68,7 @@ def send_mail_registrazione_medico(codice_identificativo, password_temporanea, e
 				raise EmailNotFound(message)
 			else:
 				raise e
-	"""
+	
 	
 			
 
@@ -107,22 +94,8 @@ def send_mail_registrazione_paziente(codice_identificativo, email_paziente):
 	message_paziente.attach(body_email_paziente)
 
 
-	# Connessione SMTP con STARTTLS per Mailtrap
-	with smtplib.SMTP(credentials.smtp_server, credentials.port) as server:
-		try:
-			server.starttls()
-			server.login(credentials.mail_sender_email, credentials.mail_sender_password)
-			server.sendmail(credentials.mail_sender_email, email_paziente, message_paziente.as_string())
-		except smtplib.SMTPException as e:
-			if e is smtplib.SMTPRecipientsRefused:
-				message = "{email_paziente} not exist or rejected"
-				raise EmailNotFound(message)
-			else:
-				raise e
-
-
-	#COMMENTATO PERCHE' IL MIO SMTP NON USA SSL
-	"""
+	
+	
 	context = ssl.create_default_context()
 	with smtplib.SMTP_SSL(credentials.smtp_server, credentials.port, context=context) as server:
 		try:
@@ -134,7 +107,7 @@ def send_mail_registrazione_paziente(codice_identificativo, email_paziente):
 				raise EmailNotFound(message)
 			else:
 				raise e
-				"""
+				
 			
 
 

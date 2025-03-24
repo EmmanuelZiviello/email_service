@@ -13,10 +13,10 @@ class EmailService:
             return {"status_code":"400"}, 400
         id_paziente=s_email["id_paziente"]
         email_paziente=s_email["email_paziente"]
-        try:
-            send_mail_registrazione_paziente(id_paziente,email_paziente)
-        except SMTPRecipientsRefused as e:
-            return{"status_code":"400"}, 400
+        #try:
+         #   send_mail_registrazione_paziente(id_paziente,email_paziente)
+        #except SMTPRecipientsRefused as e:
+         #   return{"status_code":"400"}, 400
         return {"status_code":"200"}, 200
     
     @staticmethod
@@ -27,10 +27,11 @@ class EmailService:
         email_paziente=s_email["email_paziente"]
         email_nutrizionista=s_email["email_nutrizionista"]
         password=s_email["password"]
-        try:
-            send_mail_registrazione_medico(id_paziente,password,email_nutrizionista,email_paziente)
-        except EmailNotFound:
-            return {"status_code":"404"}
+       # try:
+        #    send_mail_registrazione_medico(id_paziente,password,email_nutrizionista,email_paziente)
+        #except EmailNotFound:
+         #   return {"status_code":"404"}
+        return {"status_code":"200"}, 200
     
     @staticmethod
     def recupero_pw(s_email):
@@ -39,5 +40,5 @@ class EmailService:
         id_paziente=s_email["id_paziente"]
         email_paziente=s_email["email_paziente"]
         link=s_email["link"]
-        send_mail_refresh_paziente(email_paziente,link,id_paziente)
+       # send_mail_refresh_paziente(email_paziente,link,id_paziente)
         return {"status_code":"200"}, 200
